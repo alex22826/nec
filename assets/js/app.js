@@ -105,7 +105,7 @@
     const un = N.unreadNotes().length, bn = N.qs('#bellN');
     if (bn) { bn.textContent = un > 9 ? '9+' : (un || ''); bn.classList.toggle('on', un > 0); }
     const on = db.channels.filter(c => c.on).length, ai = N.qs('#sideAi');
-    if (ai) ai.innerHTML = `<i class="pulse ${on ? '' : 'off'}"></i><div><b>${N.t('ИИ-менеджер онлайн')}</b><small>${N.t('Подключено каналов: {n} из 3', { n: on })}</small></div>`;
+    if (ai) ai.innerHTML = `<i class="pulse ${on ? '' : 'off'}"></i><div><b>${N.t('ИИ-менеджер онлайн')}</b><small>${N.t('Подключено каналов: {n} из {t}', { n: on, t: db.channels.length })}</small></div>`;
     N.qsa('[data-nav]').forEach(a => a.classList.toggle('active', current && a.dataset.nav === current.id));
   };
 
@@ -229,5 +229,6 @@
     // другая вкладка изменила данные: подтянуть
     window.addEventListener('storage', e => { if (e.key === 'nec.db.v1' && e.newValue) { N.db = JSON.parse(e.newValue); refreshChrome(); if (current && current.def.update) current.def.update('sync'); } });
     render();
+    if (N.siteSync) N.siteSync();
   };
 })();

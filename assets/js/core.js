@@ -72,6 +72,8 @@
     let d = N.store.get(DB_KEY);
     if (!d || d.v !== N.DB_VERSION) { d = N.seed(); N.db = d; N.save(); }
     N.db = d;
+    // канал «Сайт» появился позже: добавляем в сохраненные данные без сброса
+    if (!d.channels.some(c => c.id === 'site')) { d.channels.push({ id: 'site', account: 'alex22826.github.io/nec-site', on: true, auto: true, connectedAt: Date.now() }); N.save(); }
     d.chats.forEach(c => { c.typing = null; }); // индикатор набора после перезагрузки не нужен
     return d;
   };
@@ -244,6 +246,7 @@
     human: { title: 'Клиент просит менеджера', icon: 'user', tone: 'blue' },
     question: { title: 'ИИ не нашел ответа', icon: 'help', tone: 'violet' },
     kp: { title: 'Нужно коммерческое предложение', icon: 'file', tone: 'blue' },
+    form: { title: 'Заявка с формы сайта', icon: 'file', tone: 'amber' },
     lead: { title: 'Новая заявка', icon: 'inbox', tone: 'gray' },
   };
   N.notify = (kind, chat) => {
@@ -255,5 +258,5 @@
   };
   N.unreadNotes = () => N.db.notes.filter(n => !n.read);
 
-  N.chName = id => ({ tg: 'Telegram', wa: 'WhatsApp', ig: 'Instagram', test: N.t('Тест') }[id] || id);
+  N.chName = id => ({ tg: 'Telegram', wa: 'WhatsApp', ig: 'Instagram', site: N.t('Сайт'), test: N.t('Тест') }[id] || id);
 })();

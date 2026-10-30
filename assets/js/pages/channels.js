@@ -9,8 +9,9 @@
     wa: ['Подключите номер к WhatsApp Business Platform в кабинете Meta.', 'Укажите ID номера телефона и постоянный токен доступа.', 'Пропишите адрес вебхука ниже и подтвердите его в Meta.'],
     ig: ['Переведите аккаунт Instagram в профессиональный и свяжите со страницей Facebook.', 'В Meta Business Suite разрешите приложению доступ к сообщениям.', 'Вставьте токен страницы и подтвердите вебхук.'],
   };
-  const FIELDS = { tg: [['token', 'Токен бота']], wa: [['phoneId', 'ID номера телефона'], ['token', 'Токен доступа']], ig: [['pageId', 'ID страницы Facebook'], ['token', 'Токен страницы']] };
-  const HOOK = { tg: 'telegram', wa: 'whatsapp', ig: 'instagram' };
+  STEPS.site = ['Окно ИИ-консультанта уже стоит на сайте компании.', 'Сообщения посетителей и заявки с формы приходят в «Диалоги» с пометкой «Сайт».', 'Ответ менеджера из кабинета появляется у посетителя в окне чата.'];
+  const FIELDS = { tg: [['token', 'Токен бота']], wa: [['phoneId', 'ID номера телефона'], ['token', 'Токен доступа']], ig: [['pageId', 'ID страницы Facebook'], ['token', 'Токен страницы']], site: [] };
+  const HOOK = { tg: 'telegram', wa: 'whatsapp', ig: 'instagram', site: 'site' };
 
   const stats = id => {
     const cs = N.db.chats.filter(c => c.channel === id);

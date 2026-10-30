@@ -5,8 +5,8 @@
   const UI = N.chatUI = {};
 
   /* ---------- общие куски переписки (нужны и в «Тесте ИИ») ---------- */
-  const REASON = { contract: 'клиент готов к договору', human: 'клиент попросил менеджера', question: 'вопрос вне базы знаний' };
-  const REASON_TITLE = { contract: 'Клиент готов к договору', human: 'Клиент просит менеджера', question: 'Нужен ответ специалиста' };
+  const REASON = { contract: 'клиент готов к договору', human: 'клиент попросил менеджера', question: 'вопрос вне базы знаний', form: 'заявка с формы сайта' };
+  const REASON_TITLE = { contract: 'Клиент готов к договору', human: 'Клиент просит менеджера', question: 'Нужен ответ специалиста', form: 'Заявка с формы сайта: перезвоните клиенту' };
   UI.sysText = m => {
     const v = m.vars || {}, u = v.uid && N.user(v.uid), name = u ? N.tx(u.name) : '';
     switch (m.sys) {
@@ -233,7 +233,7 @@
             <div class="dlg-tools">
               <label class="search">${N.icon('search', 16)}<input type="search" placeholder="${N.t('Поиск по клиентам и сообщениям')}" value="${N.esc(st.q)}" data-q></label>
               <div class="chips" data-ch>
-                ${['all', 'tg', 'wa', 'ig'].map(id => `<button class="chip ${st.ch === id ? 'on' : ''}" data-v="${id}">${id === 'all' ? N.t('Все') : N.chIcon(id, 16) + ' ' + N.chName(id)}</button>`).join('')}
+                ${['all', 'tg', 'wa', 'ig', 'site'].map(id => `<button class="chip ${st.ch === id ? 'on' : ''}" data-v="${id}">${id === 'all' ? N.t('Все') : N.chIcon(id, 16) + ' ' + N.chName(id)}</button>`).join('')}
               </div>
               <select class="sel" data-status>
                 ${[['all', 'Все статусы'], ['wait', 'Ждет менеджера'], ['ai', 'Ведет ИИ'], ['manager', 'У менеджера'], ['closed', 'Закрыт'], ['mine', 'Мои диалоги']].map(([v, t]) => `<option value="${v}" ${st.status === v ? 'selected' : ''}>${N.t(t)}</option>`).join('')}

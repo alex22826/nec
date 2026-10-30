@@ -95,7 +95,7 @@
       || raw.match(/(?:компания|kompaniya|company)[:\s]+([A-Za-zА-Яа-я0-9' -]{2,40})/i)
       || raw.match(/(?:мы из|biz|we are from)\s+([A-Z][A-Za-z0-9'-]+(?: [A-Z][A-Za-z0-9'-]+){1,4})/);
     if (co) ex.company = (co[0].startsWith('«') || co[0].startsWith('"') ? co[0] : co[1]).trim().replace(/[.,]$/, '');
-    const nm = raw.match(/(?:меня зовут|mening ismim|ismim|my name is|this is)\s+([A-ZА-ЯЎҚҒҲ][a-zа-яўқғҳ'’]+)/);
+    const nm = raw.match(/(?:[Мм]еня зовут|[Mm]ening ismim|[Ii]smim|[Mm]y name is|[Tt]his is)\s+([A-ZА-ЯЎҚҒҲ][a-zа-яўқғҳ'’]+)/);
     if (nm) ex.name = nm[1];
     const city = CITIES.find(c => hasAny(t, c.kw));
     if (city) ex.city = city;
@@ -186,6 +186,7 @@
       askHydro: 'Для точного подбора нужны напор воды в метрах и расход, либо примерная мощность, которая нужна объекту.',
       askPower: 'Какая мощность вам нужна?',
       askWhich: 'Подскажите, какое оборудование или услуга вас интересует?',
+      askPick: 'Какой вариант подходит и сколько нужно?',
       askQty: 'Сколько нужно?',
       askQtyOf: n => `Уточните количество: ${n}.`,
       total: (q, u, s) => `За ${q} ${u}: ${s}.`,
@@ -210,11 +211,12 @@
       me: "Men NEC kompaniyasining sun'iy intellekt menejeriman.",
       intro: "Gidro va shamol elektr stansiyalari, yuqori va past kuchlanishli shitlar, ehtiyot qismlar hamda loyihalash, qurilish va montaj xizmatlarini tanlashda yordam beraman. Sizni nima qiziqtiradi?",
       ok: (n, u) => `omborda ${n} ${u} bor`, low: (n, u) => `omborda ${n} ${u} qoldi`, out: d => `buyurtma asosida, ${d} kunda tayyorlaymiz`,
-      per: u => ` (${u} uchun)`,
+      per: u => ` / ${u}`,
       options: 'Mos variantlar:',
-      askHydro: "Aniq tanlash uchun suv bosimi (metrda) va sarfi yoki obyektga kerakli taxminiy quvvat kerak.",
+      askHydro: "Aniq tanlash uchun metrdagi suv bosimi va sarfi yoki obyektga kerakli taxminiy quvvat kerak.",
       askPower: 'Sizga qancha quvvat kerak?',
       askWhich: 'Qaysi uskuna yoki xizmat sizni qiziqtiradi?',
+      askPick: 'Qaysi variant mos keladi va nechta kerak?',
       askQty: 'Nechta kerak?',
       askQtyOf: n => `${n}: nechta kerak?`,
       total: (q, u, s) => `${q} ${u} uchun jami: ${s}.`,
@@ -244,6 +246,7 @@
       askHydro: 'To size the plant I need the water head in meters and the flow, or the approximate capacity the site needs.',
       askPower: 'What capacity do you need?',
       askWhich: 'Which equipment or service are you interested in?',
+      askPick: 'Which option suits you and how many do you need?',
       askQty: 'How many units do you need?',
       askQtyOf: n => `How many do you need: ${n}?`,
       total: (q, u, s) => `Total for ${q} ${u}: ${s}.`,
@@ -311,6 +314,13 @@
 
     // товары: новые из сообщения или те, о которых уже говорили, если спросили цену/наличие
     let shown = ex.sel.map(r => r.p);
+    // назвали только категорию («щиты в наличии?»): показать, что в ней есть
+    const focusCat = ctx.focus && ctx.focus[0] && (N.product(ctx.focus[0]) || {}).cat;
+    let catListed = false;
+    if (!shown.length && !ex.ambiguous && ex.cats.length && !(focusCat && ex.cats.includes(focusCat))) {
+      const list = N.db.products.filter(p => p.cat === ex.cats[0]).sort((a, b) => (N.available(b.id) > 0) - (N.available(a.id) > 0)).slice(0, 4);
+      if (list.length) { parts.push(L.options + '\n' + list.map(p => '• ' + productLine(p, L, lang)).join('\n')); catListed = true; }
+    }
     if (ex.ambiguous) {
       parts.push(L.options + '\n' + shown.map(p => '• ' + productLine(p, L, lang)).join('\n'));
     } else {
@@ -362,6 +372,7 @@
       const card = chat.card, pending = card.items.find(i => !i.ok);
       let q, ask;
       if (ex.ambiguous) { q = ctx.cat === 'hydro' ? L.askHydro : L.askPower; ask = 'power'; }
+      else if (catListed && !card.items.length) { q = ctx.cat === 'hydro' ? L.askHydro : ctx.cat === 'wind' ? L.askPower : L.askPick; ask = 'what'; }
       else if (!card.items.length && !card.services.length) { q = firstAi && !ex.cats.length ? L.intro : (ex.cats.length ? (ex.cats[0] === 'hydro' ? L.askHydro : L.askPower) : L.askWhich); ask = 'what'; }
       else if (pending) { q = card.items.length > 1 ? L.askQtyOf(N.product(pending.pid).name[lang]) : L.askQty; ask = 'qty'; }
       else if (!chat.client.phone) { q = L.askPhone; ask = 'phone'; }

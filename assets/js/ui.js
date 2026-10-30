@@ -71,6 +71,7 @@
     tg: { color: '#229ED9', svg: '<path fill="#fff" d="M17.6 7.2 15.7 16.8c-.1.6-.5.8-1 .5l-2.9-2.1-1.4 1.3c-.2.2-.3.3-.6.3l.2-3 5.4-4.9c.2-.2 0-.3-.3-.1l-6.7 4.2-2.9-.9c-.6-.2-.6-.6.1-.9l11.3-4.4c.5-.2 1 .1.7 1.4z"/>' },
     wa: { color: '#25D366', svg: '<path fill="#fff" d="M12 5.5a6.5 6.5 0 0 0-5.6 9.8l-.9 3.2 3.3-.9A6.5 6.5 0 1 0 12 5.5zm3.4 8.9c-.1.4-.8.8-1.2.8-.3 0-.7.1-2.2-.5a7.6 7.6 0 0 1-3-2.6c-.2-.3-.7-1-.7-1.9s.5-1.3.6-1.5c.2-.2.4-.2.5-.2h.4c.1 0 .3 0 .4.3l.6 1.4c0 .1.1.2 0 .4l-.2.3-.3.3c-.1.1-.2.2-.1.4.1.2.6.9 1.2 1.5.8.7 1.4.9 1.6 1 .2.1.3.1.4 0l.6-.7c.1-.2.3-.2.4-.1l1.4.7c.2.1.3.1.3.2.1.1.1.5-.1.9z"/>' },
     ig: { color: 'url(#igGrad)', svg: '<rect x="6.5" y="6.5" width="11" height="11" rx="3.2" fill="none" stroke="#fff" stroke-width="1.6"/><circle cx="12" cy="12" r="2.6" fill="none" stroke="#fff" stroke-width="1.6"/><circle cx="15.2" cy="8.8" r=".8" fill="#fff"/>' },
+    site: { color: '#0f2742', svg: '<circle cx="12" cy="12" r="5.6" fill="none" stroke="#f5b400" stroke-width="1.5"/><path fill="none" stroke="#f5b400" stroke-width="1.5" d="M6.4 12h11.2M12 6.4c1.8 1.6 1.8 9.6 0 11.2M12 6.4c-1.8 1.6-1.8 9.6 0 11.2"/>' },
     test: { color: '#64748b', svg: '<path fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" d="M9 8h6M10 8v4l-3 5h10l-3-5V8"/>' },
   };
   N.chIcon = (id, size = 18) => {
@@ -94,7 +95,7 @@
   N.qs = (sel, root = document) => root.querySelector(sel);
   N.qsa = (sel, root = document) => [...root.querySelectorAll(sel)];
   N.html = (el, html) => { if (el) el.innerHTML = html; return el; };
-  N.clientName = c => c.client.name || c.client.handle || N.t('Клиент');
+  N.clientName = c => c.client.name || c.client.handle || (c.channel === 'site' ? N.t('Посетитель сайта') : N.t('Клиент'));
 
   /* ---------- уведомления внизу экрана ---------- */
   N.toast = (msg, opt = {}) => {

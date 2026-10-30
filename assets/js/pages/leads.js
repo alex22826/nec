@@ -136,7 +136,7 @@
             <button data-v="table" class="${st.view === 'table' ? 'on' : ''}">${N.icon('list', 15)} ${N.t('Таблица')}</button>
           </div>
           <label class="search">${N.icon('search', 16)}<input type="search" placeholder="${N.t('Клиент, номер, товар')}" value="${N.esc(st.q)}" data-q></label>
-          <select class="sel" data-ch>${[['all', 'Все каналы'], ['tg', 'Telegram'], ['wa', 'WhatsApp'], ['ig', 'Instagram']].map(([v, t]) => `<option value="${v}" ${st.ch === v ? 'selected' : ''}>${v === 'all' ? N.t(t) : t}</option>`).join('')}</select>
+          <select class="sel" data-ch>${[['all', 'Все каналы'], ['tg', 'Telegram'], ['wa', 'WhatsApp'], ['ig', 'Instagram'], ['site', 'Сайт']].map(([v, t]) => `<option value="${v}" ${st.ch === v ? 'selected' : ''}>${N.t(t)}</option>`).join('')}</select>
           <select class="sel" data-mgr><option value="all">${N.t('Все менеджеры')}</option>${N.managers().map(u => `<option value="${u.id}" ${st.mgr === u.id ? 'selected' : ''}>${N.esc(N.tx(u.name))}</option>`).join('')}<option value="none" ${st.mgr === 'none' ? 'selected' : ''}>${N.t('Без менеджера')}</option></select>
           <span class="grow"></span>
           <button class="btn btn-light" data-export>${N.icon('download', 16)} ${N.t('Выгрузить в Excel')}</button>

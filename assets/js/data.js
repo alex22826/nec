@@ -180,6 +180,7 @@
       { id: 'tg', account: '@nec_energy_bot', on: true, auto: true, connectedAt: ago(60 * 24 * 46) },
       { id: 'wa', account: '+998 71 200 45 45', on: true, auto: true, connectedAt: ago(60 * 24 * 46) },
       { id: 'ig', account: '@nec.energy.uz', on: true, auto: true, connectedAt: ago(60 * 24 * 40) },
+      { id: 'site', account: 'alex22826.github.io/nec-site', on: true, auto: true, connectedAt: ago(60 * 24 * 2) },
     ];
 
     const chats = [], leads = [];
